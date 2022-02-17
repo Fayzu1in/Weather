@@ -1,21 +1,16 @@
-$(document).ready(function () {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
-  }
-});
-
-function successFunction(position) {
-  let lat = position.coords.latitude;
-  let long = position.coords.longitude;
-  console.log(lat, long);
-}
-
-function errorFunction(position) {
-  alert(
-    "It seems like Geolocation, which is required for this page, is not enabled in your browser.!"
-  );
-}
-
+// async function getMyLocation() {
+//   const ipResponse = await fetch(
+//     `http://api.ipapi.com/check?access_key=e15f336aa6b37d37cef60fcb54de87b4`
+//   );
+//   if (ipResponse.ok) {
+//     const ipResponseInfo = await ipResponse.json();
+//     console.log(ipResponseInfo);
+//     let lat = ipResponseInfo.latitude;
+//     let long = ipResponseInfo.longitude;
+//     console.log(lat, long);
+//   }
+// }
+// getMyLocation();
 function getCity() {
   let city = document.getElementById("cityName").value;
 
@@ -28,9 +23,12 @@ function getCity() {
       const info = await coordinateResponse.json();
       // console.log(info[0]);
       if (info.length == 0) {
-        $(".currentWeather, .hourly, .nearbyPlaces").hide(300);
+        $(".currentWeather, .hourly, .nearbyPlaces, .fiveDay").hide(300);
+
+        document.getElementById("errPg").style.display = "flex";
       } else {
         $(".currentWeather, .hourly, .nearbyPlaces").show(300);
+        document.getElementById("errPg").style.display = "none";
         let lat = info[0].lat;
         let long = info[0].lon;
 
@@ -38,6 +36,7 @@ function getCity() {
           `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&units=metric&appid=a9d459fbd4b3407b6defdda67f389e5d`
         );
         if (!weatherResponse.ok) return "wrong api";
+
         const weather = await weatherResponse.json();
         let temperature = Math.round(weather.main.temp);
         let sunrise = weather.sys.sunrise;
@@ -63,9 +62,7 @@ function getCity() {
           "date"
         ).innerHTML = `${new Date().toLocaleDateString()}`;
         let imageSource = weather.weather[0].icon;
-        // console.log(imageSource);
-        // let image = new Image();
-        // image.src = ;
+
         document.getElementById(
           "crntImg"
         ).src = `http://openweathermap.org/img/wn/${imageSource}.png`;
@@ -121,10 +118,51 @@ function getCity() {
             hours.hourly[i].wind_speed
           } ${degToText(hours.hourly[i].wind_deg)}`;
         }
+        document
+          .getElementById("fiveDayChange")
+          .addEventListener("click", async function () {
+            $(".currentWeather").hide(300);
+            $(".fiveDay").show(300);
+
+            const fiveDaysRespone = await fetch(
+              `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&units=metric&exclude=hourly&appid=a9d459fbd4b3407b6defdda67f389e5d`
+            );
+            if (!fiveDaysRespone.ok) return "wrong api";
+            const weatherOfFiveDays = await fiveDaysRespone.json();
+            console.log(weatherOfFiveDays);
+            for (let i = 0; i <= 4; i++) {
+              let timeOfDaily = new Date(weatherOfFiveDays.daily[i].dt * 1000);
+              let options = {
+                weekday: "long",
+              };
+              let week = timeOfDaily.toLocaleDateString("en-US", options);
+              let option = {
+                month: "long",
+                day: "numeric",
+              };
+              let day = timeOfDaily.toLocaleDateString("en-US", option);
+              if (i !== 0)
+                document.getElementById("week" + i).innerHTML = `${week}`;
+              document.getElementById("cardDay" + i).innerHTML = `${day}`;
+              let dailytemp = Math.round(weatherOfFiveDays.daily[i].temp.day);
+              document.getElementById(
+                "cardWeather" + i
+              ).innerHTML = `${dailytemp}\xB0C`;
+              let dailyDescription =
+                weatherOfFiveDays.daily[i].weather[0].description;
+              document.getElementById(
+                "cardFeel" + i
+              ).innerHTML = `${dailyDescription}`;
+            }
+            function hourOfDaily() {
+              let jbj = $(this);
+              console.log(jbj);
+            }
+            hourOfDaily();
+          });
       }
     }
   }
-
   getWeather(`${city}`);
 }
 
@@ -174,9 +212,10 @@ function degToText(windDirection) {
 
     case windDirection >= 11.25 && windDirection <= 33.75:
       return "NNE";
-
     case (windDirection >= 348.75 && windDirection <= 360) ||
       (windDirection >= 0 && windDirection <= 11.25):
       return "N";
   }
 }
+
+// getMyLocation();

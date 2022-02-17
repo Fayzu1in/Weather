@@ -103,19 +103,21 @@ body {
 }
 
 // five days
-#fiveDay {
+.fiveDay {
   display: flex;
   justify-content: center;
-  display: none;
   margin-top: 30px;
-  // position: absolute;
-  // left: 50%;
-  // top: 0;
-  transition: all 0.3s;
-  // transform: translate(-50%);
+}
+#card1 {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+#card5 {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 .card {
-  padding: 30px 20px;
+  padding: 40px;
   text-align: center;
   background-color: #fff;
   margin: 0 1px;
@@ -123,27 +125,30 @@ body {
   box-shadow: rgba(0, 0, 0, 0.2) 5px 5px 15px,
     rgba(255, 255, 255, 0.2) -5px -5px 15px;
   transition: all 0.3s;
+  cursor: pointer;
 }
 .card:hover {
   transform: scale(1.1);
+  border-radius: 10px;
 }
-#cardWeek {
+.weekCard {
   color: turquoise;
   font-size: 22px;
   font-weight: 600;
 }
-#cardDay {
+
+.cardDay {
   font-size: 18px;
   color: grey;
   padding: 10px 0 20px 0;
 }
-#cardWeather {
+.cardWeather {
   font-size: 24px;
   color: #000;
   font-weight: 600;
   padding: 10px 30px;
 }
-#cardFeel {
+.cardFeel {
   color: grey;
   font-size: 16px;
 }
@@ -371,4 +376,38 @@ img {
       }
     }
   }
+}
+.errorPage {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  border-radius: 10px;
+  background-color: grey;
+  padding: 30px 60px;
+  background: url(../img/404_error_checking_FI.png);
+  background-size: cover;
+  background-position: center;
+  height: 400px;
+  box-shadow: rgb(0 0 0 / 90%) 5px 5px 15px,
+    rgb(255 255 255 / 0%) -5px -5px 15px;
+  margin-bottom: 50px;
+  margin-top: 50px;
+}
+.errMsg {
+  color: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.212);
+  text-align: center;
+  backdrop-filter: blur(30px);
+  font-size: 24px;
+}
+@keyframes jump {
+  100% {
+    transform: translate3d(0, 10%, 0) scale3d(1, 1, 0.2);
+  }
+}
+.jump {
+  transform-origin: 10% 10%;
+  animation: jump 0.5s linear alternate infinite;
 }
