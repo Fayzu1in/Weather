@@ -1,170 +1,163 @@
-// async function getMyLocation() {
-//   const ipResponse = await fetch(
-//     `http://api.ipapi.com/check?access_key=e15f336aa6b37d37cef60fcb54de87b4`
-//   );
-//   if (ipResponse.ok) {
-//     const ipResponseInfo = await ipResponse.json();
-//     console.log(ipResponseInfo);
-//     let lat = ipResponseInfo.latitude;
-//     let long = ipResponseInfo.longitude;
-//     console.log(lat, long);
+// function getCity() {
+//   let city = document.getElementById("cityName").value;
+
+//   async function getWeather(location) {
+//     const coordinateResponse = await fetch(
+//       `http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=5&appid=a9d459fbd4b3407b6defdda67f389e5d`
+//     );
+//     if (coordinateResponse.ok) {
+//       const info = await coordinateResponse.json();
+//       // console.log(info[0]);
+//       if (info.length == 0) {
+//         $(".currentWeather, .hourly, .nearbyPlaces, .fiveDay").hide(300);
+
+//         document.getElementById("errPg").style.display = "flex";
+//       } else {
+//         $(".currentWeather, .hourly, .nearbyPlaces").show(300);
+//         document.getElementById("errPg").style.display = "none";
+//         let lat = info[0].lat;
+//         let long = info[0].lon;
+//       }
+//     }
 //   }
 // }
-// getMyLocation();
-function getCity() {
-  let city = document.getElementById("cityName").value;
+// getWeather(`${city}`);
 
-  async function getWeather(location) {
-    const coordinateResponse = await fetch(
-      `http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=5&appid=a9d459fbd4b3407b6defdda67f389e5d`
+async function getMyLocation() {
+  const ipResponse = await fetch(
+    `http://api.ipapi.com/check?access_key=e15f336aa6b37d37cef60fcb54de87b4`
+  );
+  if (ipResponse.ok) {
+    const ipResponseInfo = await ipResponse.json();
+    // console.log(ipResponseInfo);
+    let lat = ipResponseInfo.latitude;
+    let long = ipResponseInfo.longitude;
+    // console.log(lat, long);
+
+    const weatherResponse = await fetch(
+      `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&units=metric&appid=a9d459fbd4b3407b6defdda67f389e5d`
     );
+    if (!weatherResponse.ok) return "wrong api";
 
-    if (coordinateResponse.ok) {
-      const info = await coordinateResponse.json();
-      // console.log(info[0]);
-      if (info.length == 0) {
-        $(".currentWeather, .hourly, .nearbyPlaces, .fiveDay").hide(300);
+    const weather = await weatherResponse.json();
+    let temperature = Math.round(weather.main.temp);
+    let sunrise = weather.sys.sunrise;
+    let sunset = weather.sys.sunset;
+    let realFeel = Math.round(weather.main.feels_like);
+    sunrise = new Date(sunrise * 1000).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    sunset = new Date(sunset * 1000).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    // console.log(weather);
+    document.getElementById("crntUp").innerHTML = `${temperature}\xB0C`;
+    document.getElementById("sunrise").innerHTML = `Sunrise: ${sunrise}`;
+    document.getElementById("sunset").innerHTML = `Sunset: ${sunset}`;
+    document.getElementById(
+      "crntDown"
+    ).innerHTML = `Real Feel: ${realFeel}\xB0C`;
+    // document.getElementById("current").innerHTML = `${city}`;
+    document.getElementById(
+      "date"
+    ).innerHTML = `${new Date().toLocaleDateString()}`;
+    let imageSource = weather.weather[0].icon;
 
-        document.getElementById("errPg").style.display = "flex";
-      } else {
-        $(".currentWeather, .hourly, .nearbyPlaces").show(300);
-        document.getElementById("errPg").style.display = "none";
-        let lat = info[0].lat;
-        let long = info[0].lon;
+    document.getElementById(
+      "crntImg"
+    ).src = `http://openweathermap.org/img/wn/${imageSource}.png`;
+    // console.log(lat);
+    // console.log(long);
 
-        const weatherResponse = await fetch(
-          `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&units=metric&appid=a9d459fbd4b3407b6defdda67f389e5d`
-        );
-        if (!weatherResponse.ok) return "wrong api";
+    const hourlyWeather = await fetch(
+      `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&units=metric&exclude=daily&appid=a9d459fbd4b3407b6defdda67f389e5d`
+    );
+    if (!hourlyWeather.ok) return "wrong hourly wheather api";
+    const hours = await hourlyWeather.json();
 
-        const weather = await weatherResponse.json();
-        let temperature = Math.round(weather.main.temp);
-        let sunrise = weather.sys.sunrise;
-        let sunset = weather.sys.sunset;
-        let realFeel = Math.round(weather.main.feels_like);
-        sunrise = new Date(sunrise * 1000).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        sunset = new Date(sunset * 1000).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-        // console.log(weather);
-        document.getElementById("crntUp").innerHTML = `${temperature}\xB0C`;
-        document.getElementById("sunrise").innerHTML = `Sunrise: ${sunrise}`;
-        document.getElementById("sunset").innerHTML = `Sunset: ${sunset}`;
-        document.getElementById(
-          "crntDown"
-        ).innerHTML = `Real Feel: ${realFeel}\xB0C`;
-        document.getElementById("current").innerHTML = `${city}`;
-        document.getElementById(
-          "date"
-        ).innerHTML = `${new Date().toLocaleDateString()}`;
-        let imageSource = weather.weather[0].icon;
+    // Hourly weather section
 
-        document.getElementById(
-          "crntImg"
-        ).src = `http://openweathermap.org/img/wn/${imageSource}.png`;
-        // console.log(lat);
-        // console.log(long);
+    for (let i = 1; i <= 6; i++) {
+      // Hours Section
 
-        const hourlyWeather = await fetch(
-          `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&units=metric&exclude=daily&appid=a9d459fbd4b3407b6defdda67f389e5d`
-        );
-        if (!hourlyWeather.ok) return "wrong hourly wheather api";
-        const hours = await hourlyWeather.json();
+      let timeOfWeather = new Date(
+        hours.hourly[i].dt * 1000
+      ).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      document.getElementById("hour" + i).innerHTML = `${timeOfWeather}`;
 
-        // Hourly weather section
+      // Image section
 
-        for (let i = 1; i <= 6; i++) {
-          // Hours Section
+      let firstImgOfHour = hours.hourly[i].weather[0].icon;
+      document.getElementById(
+        "icon" + i
+      ).src = `http://openweathermap.org/img/wn/${firstImgOfHour}.png`;
 
-          let timeOfWeather = new Date(
-            hours.hourly[i].dt * 1000
-          ).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          });
-          document.getElementById("hour" + i).innerHTML = `${timeOfWeather}`;
+      // Forecast
 
-          // Image section
+      let HourForecast = hours.hourly[i].weather[0].description;
+      document.getElementById("forecast" + i).innerHTML = `${HourForecast}`;
 
-          let firstImgOfHour = hours.hourly[i].weather[0].icon;
-          document.getElementById(
-            "icon" + i
-          ).src = `http://openweathermap.org/img/wn/${firstImgOfHour}.png`;
+      // Temperature section
+      let HourlyTemp = Math.round(hours.hourly[i].temp);
+      document.getElementById("tempHour" + i).innerHTML = `${HourlyTemp}\xB0C`;
 
-          // Forecast
+      // Real Feel
+      let realFeelHour = Math.round(hours.hourly[i].feels_like);
+      document.getElementById(
+        "realFeelHourly" + i
+      ).innerHTML = `${realFeelHour}\xB0C`;
 
-          let HourForecast = hours.hourly[i].weather[0].description;
-          document.getElementById("forecast" + i).innerHTML = `${HourForecast}`;
+      // wind speed &&  direction
 
-          // Temperature section
-          let HourlyTemp = Math.round(hours.hourly[i].temp);
-          document.getElementById(
-            "tempHour" + i
-          ).innerHTML = `${HourlyTemp}\xB0C`;
-
-          // Real Feel
-          let realFeelHour = Math.round(hours.hourly[i].feels_like);
-          document.getElementById(
-            "realFeelHourly" + i
-          ).innerHTML = `${realFeelHour}\xB0C`;
-
-          // wind speed &&  direction
-
-          document.getElementById("windHour" + i).innerHTML = `${
-            hours.hourly[i].wind_speed
-          } ${degToText(hours.hourly[i].wind_deg)}`;
-        }
-        document
-          .getElementById("fiveDayChange")
-          .addEventListener("click", async function () {
-            $(".currentWeather").hide(300);
-            $(".fiveDay").show(300);
-
-            const fiveDaysRespone = await fetch(
-              `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&units=metric&exclude=hourly&appid=a9d459fbd4b3407b6defdda67f389e5d`
-            );
-            if (!fiveDaysRespone.ok) return "wrong api";
-            const weatherOfFiveDays = await fiveDaysRespone.json();
-            console.log(weatherOfFiveDays);
-            for (let i = 0; i <= 4; i++) {
-              let timeOfDaily = new Date(weatherOfFiveDays.daily[i].dt * 1000);
-              let options = {
-                weekday: "long",
-              };
-              let week = timeOfDaily.toLocaleDateString("en-US", options);
-              let option = {
-                month: "long",
-                day: "numeric",
-              };
-              let day = timeOfDaily.toLocaleDateString("en-US", option);
-              if (i !== 0)
-                document.getElementById("week" + i).innerHTML = `${week}`;
-              document.getElementById("cardDay" + i).innerHTML = `${day}`;
-              let dailytemp = Math.round(weatherOfFiveDays.daily[i].temp.day);
-              document.getElementById(
-                "cardWeather" + i
-              ).innerHTML = `${dailytemp}\xB0C`;
-              let dailyDescription =
-                weatherOfFiveDays.daily[i].weather[0].description;
-              document.getElementById(
-                "cardFeel" + i
-              ).innerHTML = `${dailyDescription}`;
-            }
-            function hourOfDaily() {
-              let jbj = $(this);
-              console.log(jbj);
-            }
-            hourOfDaily();
-          });
-      }
+      document.getElementById("windHour" + i).innerHTML = `${
+        hours.hourly[i].wind_speed
+      } ${degToText(hours.hourly[i].wind_deg)}`;
     }
+    document
+      .getElementById("fiveDayChange")
+      .addEventListener("click", async function () {
+        $(".currentWeather").hide(300);
+        $(".fiveDay").show(300);
+
+        const fiveDaysRespone = await fetch(
+          `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${long}&units=metric&exclude=hourly&appid=a9d459fbd4b3407b6defdda67f389e5d`
+        );
+        if (!fiveDaysRespone.ok) return "wrong api";
+        const weatherOfFiveDays = await fiveDaysRespone.json();
+        console.log(weatherOfFiveDays);
+        for (let i = 0; i <= 4; i++) {
+          let timeOfDaily = new Date(weatherOfFiveDays.daily[i].dt * 1000);
+          let options = {
+            weekday: "long",
+          };
+          let week = timeOfDaily.toLocaleDateString("en-US", options);
+          let option = {
+            month: "long",
+            day: "numeric",
+          };
+          let day = timeOfDaily.toLocaleDateString("en-US", option);
+          if (i !== 0)
+            document.getElementById("week" + i).innerHTML = `${week}`;
+          document.getElementById("cardDay" + i).innerHTML = `${day}`;
+          let dailytemp = Math.round(weatherOfFiveDays.daily[i].temp.day);
+          document.getElementById(
+            "cardWeather" + i
+          ).innerHTML = `${dailytemp}\xB0C`;
+          let dailyDescription =
+            weatherOfFiveDays.daily[i].weather[0].description;
+          document.getElementById(
+            "cardFeel" + i
+          ).innerHTML = `${dailyDescription}`;
+        }
+      });
   }
-  getWeather(`${city}`);
 }
+getMyLocation();
 
 function degToText(windDirection) {
   switch (true) {
