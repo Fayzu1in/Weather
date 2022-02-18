@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Weather</title>
     <link rel="stylesheet" href="./assets/css/style.css" />
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
@@ -19,7 +19,7 @@
       <div class="bckgHero">
         <div class="container">
           <div class="hero">
-            <div class="left">My weather</div>
+            <a class="left" onClick="window.location.reload()">My weather</a>
             <div class="right">
               <input id="cityName" type="search" placeholder="Los Angeles" />
               <button onclick="getCity()" id="search">search</button>
@@ -69,43 +69,42 @@
         </div>
         <!-- 5 DAYS WEATHER -->
         <div id="5daySection" class="fiveDay" style="display: none">
-          <div class="card" id="card1" onclick="hourOfDaily()">
+          <div class="card" id="card1" onclick="hourOfDaily0()">
             <div class="weekCard" id="week0">Tonight</div>
-            <div class="cardDay" id="cardDay0">June 15</div>
+            <div class="cardDay" id="cardDay0"></div>
             <img height="70px" src="" alt="" />
             <div class="cardWeather" id="cardWeather0">27C'</div>
-            <div class="cardFeel" id="cardFeel0">Clear and Warm</div>
+            <div class="cardFeel" id="cardFeel0"></div>
           </div>
-          <div class="card" id="card2" onclick="hourOfDaily()">
-            <div class="weekCard" id="week1">Today</div>
-            <div class="cardDay" id="cardDay1">June 15</div>
+          <div class="card" id="card2" onclick="hourOfDaily1()">
+            <div class="weekCard" id="week1"></div>
+            <div class="cardDay" id="cardDay1"></div>
             <img height="70px" src="" alt="" />
             <div class="cardWeather" id="cardWeather1">27C'</div>
-            <div class="cardFeel" id="cardFeel1">Clear and Warm</div>
+            <div class="cardFeel" id="cardFeel1"></div>
           </div>
-          <div class="card" id="card3" onclick="hourOfDaily()">
-            <div class="weekCard" id="week2">Today</div>
-            <div class="cardDay" id="cardDay2">June 15</div>
+          <div class="card" id="card3" onclick="hourOfDaily2()">
+            <div class="weekCard" id="week2"></div>
+            <div class="cardDay" id="cardDay2"></div>
             <img height="70px" src="" alt="" />
             <div class="cardWeather" id="cardWeather2">27C'</div>
-            <div class="cardFeel" id="cardFeel2">Clear and Warm</div>
+            <div class="cardFeel" id="cardFeel2"></div>
           </div>
-          <div class="card" id="card4" onclick="hourOfDaily()">
-            <div class="weekCard" id="week3">Today</div>
-            <div class="cardDay" id="cardDay3">June 15</div>
+          <div class="card" id="card4" onclick="hourOfDaily3()">
+            <div class="weekCard" id="week3"></div>
+            <div class="cardDay" id="cardDay3"></div>
             <img height="70px" src="" alt="" />
             <div class="cardWeather" id="cardWeather3">27C'</div>
             <div class="cardFeel" id="cardFeel3">Clear and Warm</div>
           </div>
-          <div class="card" id="card5" onclick="hourOfDaily()">
-            <div class="weekCard" id="week4">Today</div>
-            <div class="cardDay" id="cardDay4">June 15</div>
+          <div class="card" id="card5" onclick="hourOfDaily4()">
+            <div class="weekCard" id="week4"></div>
+            <div class="cardDay" id="cardDay4"></div>
             <img height="70px" src="" alt="" />
             <div class="cardWeather" id="cardWeather4">27C'</div>
-            <div class="cardFeel" id="cardFeel4">Clear and Warm</div>
+            <div class="cardFeel" id="cardFeel4"></div>
           </div>
         </div>
-
         <!-- 5 DAYS WEATHER -->
 
         <div class="hourly">
@@ -121,7 +120,6 @@
                 <th id="hour5"></th>
                 <th id="hour6"></th>
               </tr>
-
               <tr>
                 <td></td>
                 <td>
@@ -182,7 +180,6 @@
             </table>
           </div>
         </div>
-
         <div class="nearbyPlaces">
           <div class="nearbyPlaces__upper">Nearby Places</div>
           <div class="nearbyPlacesMain">

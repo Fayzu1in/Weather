@@ -7,17 +7,27 @@
     <title>Document</title>
   </head>
   <body>
+    <ul class="tabs_calendar">
+      <li>Item 0</li>
+      <li>Item 1</li>
+      <li>Item 2</li>
+      <li>Item 3</li>
+    </ul>
+
     <script>
-      //   let week;
-      //   let date = new Date(1645081200 * 1000);
-      var day = new Date(1645081200 * 1000);
-
-      var options = {
-        month: "long",
-        day: "numeric",
+      window.onload = function () {
+        var parent = document.getElementsByClassName("tabs_calendar")[0];
+        parent.onclick = function (e) {
+          var e = e || event;
+          var target = e.target || e.srcElement;
+          for (var i = 0; i < parent.children.length; i++) {
+            if (parent.children[i] == target) {
+              alert("Это элемент номер - " + i);
+              break;
+            }
+          }
+        };
       };
-
-      console.log(day.toLocaleDateString("en-US", options));
     </script>
   </body>
 </html>

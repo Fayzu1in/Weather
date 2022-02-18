@@ -28,6 +28,7 @@ body {
   font-size: 28px;
   font-weight: 600;
   color: turquoise;
+  cursor: pointer;
 }
 .hero .right {
   margin-top: 10px;
