@@ -64,6 +64,15 @@ async function getWeather({ lat, lon }) {
   });
 
   //
+  async function hourOfDaily(day) {
+    // const dailyResponse = await fetch(
+    //   `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=a9d459fbd4b3407b6defdda67f389e5d`
+    // );
+    // if (!dailyResponse.ok) return error;
+    // dailyResponseInfo = await dailyResponse.json();
+    // console.log(dailyResponseInfo);
+  }
+  hourOfDaily();
   //
   document.getElementById("crntUp").innerHTML = `${temperature}\xB0C`;
   document.getElementById("sunrise").innerHTML = `Sunrise: ${sunrise}`;
@@ -124,7 +133,7 @@ async function getWeather({ lat, lon }) {
       );
       if (!fiveDaysRespone.ok) return "wrong api";
       const weatherOfFiveDays = await fiveDaysRespone.json();
-      console.log(weatherOfFiveDays);
+      // console.log(weatherOfFiveDays);
       for (let i = 0; i <= 4; i++) {
         let timeOfDaily = new Date(weatherOfFiveDays.daily[i].dt * 1000);
         let options = {
