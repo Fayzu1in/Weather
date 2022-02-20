@@ -70,37 +70,37 @@
         <!-- 5 DAYS WEATHER -->
         <div id="5daySection" class="fiveDay" style="display: none">
           <div class="card" id="card1" onclick="hourOfDaily(0)">
-            <div class="weekCard" id="week0">Tonight</div>
+            <div class="weekCard" id="week0">Today</div>
             <div class="cardDay" id="cardDay0"></div>
-            <img height="70px" src="" alt="" />
+            <img id="5daysIcon0" height="70px" src="" alt="" />
             <div class="cardWeather" id="cardWeather0">27C'</div>
             <div class="cardFeel" id="cardFeel0"></div>
           </div>
           <div class="card" id="card2" onclick="hourOfDaily(1)">
             <div class="weekCard" id="week1"></div>
             <div class="cardDay" id="cardDay1"></div>
-            <img height="70px" src="" alt="" />
+            <img id="5daysIcon1" height="70px" src="" alt="" />
             <div class="cardWeather" id="cardWeather1">27C'</div>
             <div class="cardFeel" id="cardFeel1"></div>
           </div>
           <div class="card" id="card3" onclick="hourOfDaily(2)">
             <div class="weekCard" id="week2"></div>
             <div class="cardDay" id="cardDay2"></div>
-            <img height="70px" src="" alt="" />
+            <img id="5daysIcon2" height="70px" src="" alt="" />
             <div class="cardWeather" id="cardWeather2">27C'</div>
             <div class="cardFeel" id="cardFeel2"></div>
           </div>
           <div class="card" id="card4" onclick="hourOfDaily(3)">
             <div class="weekCard" id="week3"></div>
             <div class="cardDay" id="cardDay3"></div>
-            <img height="70px" src="" alt="" />
+            <img id="5daysIcon3" height="70px" src="" alt="" />
             <div class="cardWeather" id="cardWeather3">27C'</div>
             <div class="cardFeel" id="cardFeel3">Clear and Warm</div>
           </div>
           <div class="card" id="card5" onclick="hourOfDaily(4)">
             <div class="weekCard" id="week4"></div>
             <div class="cardDay" id="cardDay4"></div>
-            <img height="70px" src="" alt="" />
+            <img id="5daysIcon4" height="70px" src="" alt="" />
             <div class="cardWeather" id="cardWeather4">27C'</div>
             <div class="cardFeel" id="cardFeel4"></div>
           </div>
@@ -185,33 +185,33 @@
           <div class="nearbyPlacesMain">
             <div class="nearbyPlacesMain__left">
               <div class="nearbyPlacesMain__left-upper">
-                <div id="nrbName">Los Angeles</div>
+                <div id="nrbName1">Los Angeles</div>
                 <div id="nrbWeather">
-                  <img height="10px" src="" alt="" id="nrbImg" />
-                  <div id="gradus">36'C</div>
+                  <img height="10px" id="nrbIcons1" src="" alt="" />
+                  <div id="gradus1">36'C</div>
                 </div>
               </div>
               <div class="nearbyPlacesMain__left-down">
-                <div id="nrbName">Los Angeles</div>
+                <div id="nrbName2">Los Angeles</div>
                 <div id="nrbWeather">
-                  <img height="10px" src="" alt="" id="nrbImg" />
-                  <div id="gradus">36'C</div>
+                  <img height="10px" id="nrbIcons2" src="" alt="" />
+                  <div id="gradus2">36'C</div>
                 </div>
               </div>
             </div>
             <div class="nearbyPlacesMain__right">
               <div class="nearbyPlacesMain__right-upper">
-                <div id="nrbName">Los Angeles</div>
+                <div id="nrbName3">Los Angeles</div>
                 <div id="nrbWeather">
-                  <img height="10px" src="" alt="" id="nrbImg" />
-                  <div id="gradus">36'C</div>
+                  <img height="10px" id="nrbIcons3" src="" alt="" />
+                  <div id="gradus3">36'C</div>
                 </div>
               </div>
               <div class="nearbyPlacesMain__right-down">
-                <div id="nrbName">Los Angeles</div>
+                <div id="nrbName4">Los Angeles</div>
                 <div id="nrbWeather">
-                  <img height="10px" src="" alt="" id="nrbImg" />
-                  <div id="gradus">36'C</div>
+                  <img height="10px" id="nrbIcons4" src="" alt="" />
+                  <div id="gradus4">36'C</div>
                 </div>
               </div>
             </div>
@@ -223,6 +223,11 @@
             <p>Could not found <span id="seachedPlace"></span></p>
           </div>
         </div>
+      </div>
+      <div style="display: none" id="modal1" class="modal">
+        <button id="mdlClose" class="modal__close">&times</button>
+        <p>In the process of developing...</p>
+        <p>В процессе разработки...</p>
       </div>
     </div>
     <script src="./assets/js/index.js"></script>

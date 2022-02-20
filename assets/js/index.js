@@ -8,6 +8,7 @@ async function getCity() {
     document.getElementById("today").style.display = "none";
     document.getElementById("fiveDayChange").style.display = "none";
   } else {
+    $(".fiveDay").hide(200);
     $(".currentWeather, .hourly, .nearbyPlaces").show(300);
     document.getElementById("errPg").style.display = "none";
     document.getElementById("today").style.display = "block";
@@ -31,10 +32,11 @@ async function getCoordinates(location) {
 
 async function getMyLocation() {
   const ipResponse = await fetch(
-    `http://api.ipapi.com/check?access_key=e15f336aa6b37d37cef60fcb54de87b4`
+    `http://api.ipstack.com/check?access_key=96038c612eaf1f173d1649c9f1b9b96f`
   );
   if (!ipResponse.ok) return undefined;
   const ipResponseInfo = await ipResponse.json();
+  console.log(ipResponseInfo);
   document.getElementById(
     "current"
   ).innerHTML = `${ipResponseInfo.location.capital}`;
@@ -63,16 +65,56 @@ async function getWeather({ lat, lon }) {
     minute: "2-digit",
   });
 
-  //
-  async function hourOfDaily(day) {
-    // const dailyResponse = await fetch(
-    //   `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=a9d459fbd4b3407b6defdda67f389e5d`
-    // );
-    // if (!dailyResponse.ok) return error;
-    // dailyResponseInfo = await dailyResponse.json();
-    // console.log(dailyResponseInfo);
+  async function getNearby() {
+    let city = document.getElementById("cityName").value;
+    // console.log(city);
+    getCoordinates(city);
+    // console.log(lat, lon);
+    const nearbyInfo = await fetch(
+      // только 20 запросов в день
+      `https://htmlweb.ru/api/geo/city_coming/?latitude=${lat}&longitude=${lon}&length=500&level=1&json&api_key=dc0aa23badb43916e74ad65fc67a7f73`
+    );
+    const nearby = await nearbyInfo.json();
+    // console.log(nearby);
+    for (let j = 1; j <= 4; j++) {
+      let cities = nearby.items[j];
+      getCoordinates(cities);
+      // console.log(cities);
+
+      let citiesLat = cities.latitude;
+      let citiesLot = cities.longitude;
+      // console.log(citiesLat, citiesLot);
+      async function getNearbyWeather() {
+        const nearbWeatherResponse = await fetch(
+          `http://api.openweathermap.org/data/2.5/weather?lat=${citiesLat}&lon=${citiesLot}&units=metric&appid=a9d459fbd4b3407b6defdda67f389e5d`
+        );
+        nearbWeather = await nearbWeatherResponse.json();
+        // console.log(nearbWeather);
+        document.getElementById("gradus" + j).innerHTML = `${Math.round(
+          nearbWeather.main.temp
+        )}\xB0C`;
+        document.getElementById(
+          "nrbName" + j
+        ).innerHTML = `${nearbWeather.name}`;
+        document.getElementById(
+          "nrbIcons" + j
+        ).src = `http://openweathermap.org/img/wn/${nearbWeather.weather[0].icon}.png`;
+      }
+      getNearbyWeather();
+      // console.log(citiesLat, citiesLot);
+    }
   }
-  hourOfDaily();
+  getNearby();
+  //
+  // async function hourOfDaily(day) {
+  // const dailyResponse = await fetch(
+  //   `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=a9d459fbd4b3407b6defdda67f389e5d`
+  // );
+  // if (!dailyResponse.ok) return error;
+  // dailyResponseInfo = await dailyResponse.json();
+  // console.log(dailyResponseInfo);
+  // }
+  // hourOfDaily();
   //
   document.getElementById("crntUp").innerHTML = `${temperature}\xB0C`;
   document.getElementById("sunrise").innerHTML = `Sunrise: ${sunrise}`;
@@ -157,6 +199,11 @@ async function getWeather({ lat, lon }) {
         document.getElementById(
           "cardFeel" + i
         ).innerHTML = `${dailyDescription}`;
+        let dailyIcon = weatherOfFiveDays.daily[i].weather[0].icon;
+        // console.log(dailyIcon);
+        document.getElementById(
+          "5daysIcon" + [i]
+        ).src = `http://openweathermap.org/img/wn/${dailyIcon}.png`;
       }
     });
 }
@@ -169,6 +216,13 @@ toToday();
 getMyLocation().then((res) => {
   getWeather(res);
 });
+function hourOfDaily() {
+  $(".modal").show(400);
+
+  document.getElementById("mdlClose").onclick = function () {
+    $(".modal").hide(400);
+  };
+}
 
 function degToText(windDirection) {
   switch (true) {
